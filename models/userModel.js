@@ -30,6 +30,11 @@ const userSchema = new mongoose.Schema(
         "material_handling",
       ],
     },
+    trucksAssigned: [
+      {
+        type: String,
+      },
+    ],
   },
   { timestamps: true }
 );

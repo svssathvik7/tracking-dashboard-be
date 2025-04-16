@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const trackingSchema = new mongoose.Schema(
   {
+    finished: {
+      type: Boolean,
+      required: true,
+    },
     trackingNumber: {
       type: String,
       required: true,
@@ -11,11 +15,9 @@ const trackingSchema = new mongoose.Schema(
         {
           start: {
             type: Date,
-            default: Date.now,
           },
           end: {
             type: Date,
-            default: Date.now,
           },
         },
       ],
@@ -23,11 +25,9 @@ const trackingSchema = new mongoose.Schema(
         {
           start: {
             type: Date,
-            default: Date.now,
           },
           end: {
             type: Date,
-            default: Date.now,
           },
         },
       ],
@@ -35,34 +35,32 @@ const trackingSchema = new mongoose.Schema(
         {
           start: {
             type: Date,
-            default: Date.now,
           },
           end: {
             type: Date,
-            default: Date.now,
           },
         },
       ],
-      qc: {
-        start: {
-          type: Date,
-          default: Date.now,
+      qc: [
+        {
+          start: {
+            type: Date,
+          },
+          end: {
+            type: Date,
+          },
         },
-        end: {
-          type: Date,
-          default: Date.now,
+      ],
+      material_building: [
+        {
+          start: {
+            type: Date,
+          },
+          end: {
+            type: Date,
+          },
         },
-      },
-      material_building: {
-        start: {
-          type: Date,
-          default: Date.now,
-        },
-        end: {
-          type: Date,
-          default: Date.now,
-        },
-      },
+      ],
     },
   },
   { timestamps: true }
