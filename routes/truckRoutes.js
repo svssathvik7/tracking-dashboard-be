@@ -17,4 +17,45 @@ router.get("/get-all-trucks", async (req, res) => {
   return res.status(200).json({ data: response });
 });
 
+router.post("/update", async (req, res) => {
+  try {
+    const { trackingNumber, checkpoint, index, isStart } = req.body;
+
+    const response = await Tracking.findOne({ trackingNumber });
+
+    if (!response) {
+      return res.status(404).json({ error: "Tracking record not found." });
+    }
+
+    if (!response.timestamps[checkpoint]) {
+      response.timestamps[checkpoint] = [];
+    }
+
+    if (response.timestamps[checkpoint].length >= index + 1) {
+      if (isStart) {
+        response.timestamps[checkpoint][index].start = Date.now();
+      } else {
+        response.timestamps[checkpoint][index].end = Date.now();
+      }
+    } else {
+      // Create empty entries up to the index
+      while (response.timestamps[checkpoint].length <= index) {
+        response.timestamps[checkpoint].push({});
+      }
+      if (isStart) {
+        response.timestamps[checkpoint][index].start = Date.now();
+      } else {
+        response.timestamps[checkpoint][index].end = Date.now();
+      }
+    }
+
+    await response.save();
+
+    res.status(200).json({ success: true, message: "Timestamp updated." });
+  } catch (error) {
+    console.error("Error updating timestamp:", error);
+    res.status(500).json({ success: false, error: "Internal server error." });
+  }
+});
+
 export default router;
