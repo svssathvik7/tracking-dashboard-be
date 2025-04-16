@@ -51,7 +51,7 @@ const trackingSchema = new mongoose.Schema(
           },
         },
       ],
-      material_building: [
+      material_handling: [
         {
           start: {
             type: Date,
