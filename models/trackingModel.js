@@ -68,4 +68,5 @@ const trackingSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("tracking", trackingSchema);
+const Tracking = mongoose.model("tracking", trackingSchema);
+export default Tracking;
