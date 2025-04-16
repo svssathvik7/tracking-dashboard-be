@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const trackingSchema = new mongoose.Schema(
   {
+    currentStage: {
+      type: Number,
+      default: 0,
+    },
     finished: {
       type: Boolean,
       required: true,

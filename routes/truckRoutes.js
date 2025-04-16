@@ -33,8 +33,10 @@ router.post("/update", async (req, res) => {
 
     if (response.timestamps[checkpoint].length >= index + 1) {
       if (isStart) {
+        response.currentStage += 1;
         response.timestamps[checkpoint][index].start = Date.now();
       } else {
+        response.currentStage += 1;
         response.timestamps[checkpoint][index].end = Date.now();
       }
     } else {
@@ -43,10 +45,15 @@ router.post("/update", async (req, res) => {
         response.timestamps[checkpoint].push({});
       }
       if (isStart) {
+        response.currentStage += 1;
         response.timestamps[checkpoint][index].start = Date.now();
       } else {
+        response.currentStage += 1;
         response.timestamps[checkpoint][index].end = Date.now();
       }
+    }
+    if (response.currentStage == 16) {
+      response.finished = true;
     }
 
     await response.save();
