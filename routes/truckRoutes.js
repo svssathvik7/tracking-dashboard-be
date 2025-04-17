@@ -31,6 +31,17 @@ router.get("/get-all-trucks", async (req, res) => {
   return res.status(200).json({ data: response });
 });
 
+let checkpoints = [
+  "entry_gate",
+  "front_office",
+  "weigh_bridge",
+  "qc",
+  "material_handling",
+  "weigh_bridge_return",
+  "front_office_return",
+  "entry_gate_return",
+];
+
 router.post("/update", async (req, res) => {
   try {
     const { trackingNumber, checkpoint, isStart } = req.body;
@@ -50,7 +61,10 @@ router.post("/update", async (req, res) => {
       response.timestamps[checkpoint].start = Date.now();
     } else {
       response.currentStage += 1;
+      const currentIndex = checkpoints.indexOf(checkpoint);
       response.timestamps[checkpoint].end = Date.now();
+      response.timestamps[checkpoints[currentIndex + 1]].start = Date.now();
+      response.currentStage += 1;
     }
     if (response.currentStage == 16) {
       response.finished = true;
