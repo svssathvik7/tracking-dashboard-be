@@ -27,7 +27,7 @@ router.post("/add-truck", async (req, res) => {
 });
 
 router.get("/get-all-trucks", async (req, res) => {
-  const response = await Tracking.find({});
+  const response = await Tracking.find({}).sort({ updated_at: -1 });
   return res.status(200).json({ data: response });
 });
 
