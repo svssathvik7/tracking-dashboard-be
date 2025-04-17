@@ -7,6 +7,19 @@ router.post("/add-truck/:id", async (req, res) => {
   const newTruck = await Tracking({
     trackingNumber: id,
     finished: false,
+    timestamps: {
+      entry_gate: {
+        start: null,
+        end: null,
+      },
+      front_office: { start: null, end: null },
+      weigh_bridge: { start: null, end: null },
+      qc: { start: null, end: null },
+      material_handling: { start: null, end: null },
+      weigh_bridge_return: { start: null, end: null },
+      front_office_return: { start: null, end: null },
+      entry_gate_return: { start: null, end: null },
+    },
   });
   await newTruck.save();
   return res.status(201).json({ message: "Created tracking successfully!" });
@@ -19,7 +32,7 @@ router.get("/get-all-trucks", async (req, res) => {
 
 router.post("/update", async (req, res) => {
   try {
-    const { trackingNumber, checkpoint, index, isStart } = req.body;
+    const { trackingNumber, checkpoint, isStart } = req.body;
 
     const response = await Tracking.findOne({ trackingNumber });
 
@@ -34,22 +47,19 @@ router.post("/update", async (req, res) => {
     if (response.timestamps[checkpoint].length >= index + 1) {
       if (isStart) {
         response.currentStage += 1;
-        response.timestamps[checkpoint][index].start = Date.now();
+        response.timestamps[checkpoint].start = Date.now();
       } else {
         response.currentStage += 1;
-        response.timestamps[checkpoint][index].end = Date.now();
+        response.timestamps[checkpoint].end = Date.now();
       }
     } else {
       // Create empty entries up to the index
-      while (response.timestamps[checkpoint].length <= index) {
-        response.timestamps[checkpoint].push({});
-      }
       if (isStart) {
         response.currentStage += 1;
-        response.timestamps[checkpoint][index].start = Date.now();
+        response.timestamps[checkpoint].start = Date.now();
       } else {
         response.currentStage += 1;
-        response.timestamps[checkpoint][index].end = Date.now();
+        response.timestamps[checkpoint].end = Date.now();
       }
     }
     if (response.currentStage == 16) {

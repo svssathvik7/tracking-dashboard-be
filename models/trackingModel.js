@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const timestampSchema = new mongoose.Schema(
   {
-    start: { type: Date },
-    end: { type: Date },
+    start: { type: Date, default: null },
+    end: { type: Date, default: null },
   },
   { _id: false }
 );
