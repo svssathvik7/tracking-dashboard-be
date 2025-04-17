@@ -5,6 +5,7 @@ const router = express.Router();
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email, password }).select("-password");
+  console.log(user); // Add this line to check the user object returned by the findOne() method
   if (!user) {
     return res.status(400).json({ message: "Invalid credentials" });
   }

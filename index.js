@@ -10,10 +10,11 @@ import createAdmin from "./services/createAdmin.js";
 const app = express();
 const port = 3000;
 
-const dbUrl = process.env.DB || "mongodb://localhost:27017/factory-db";
+const dbUrl = process.env.DB;
 
 const db = mongoose.connect(dbUrl);
 db.then(() => {
+  // createAdmin(); // Call the createAdmin function her
   console.log("Connected to MongoDB");
 });
 db.catch((err) => {
