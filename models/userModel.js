@@ -20,16 +20,21 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "operator"],
       required: true,
     },
-    checkPointAssigned: {
-      type: String,
-      enum: [
-        "entry_gate",
-        "front_office",
-        "weigh_bridge",
-        "qc",
-        "material_handling",
-      ],
-    },
+    checkPointAssigned: [
+      {
+        type: String,
+        enum: [
+          "entry_gate",
+          "front_office",
+          "weigh_bridge",
+          "qc",
+          "material_handling",
+          "weigh_bridge_return",
+          "front_office_return",
+          "entry_gate_return",
+        ],
+      },
+    ],
     trucksAssigned: [
       {
         type: String,
