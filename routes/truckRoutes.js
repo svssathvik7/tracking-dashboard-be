@@ -41,26 +41,15 @@ router.post("/update", async (req, res) => {
     }
 
     if (!response.timestamps[checkpoint]) {
-      response.timestamps[checkpoint] = [];
+      return res.status(401).json({ error: "Checkpoint not found." });
     }
 
-    if (response.timestamps[checkpoint].length >= index + 1) {
-      if (isStart) {
-        response.currentStage += 1;
-        response.timestamps[checkpoint].start = Date.now();
-      } else {
-        response.currentStage += 1;
-        response.timestamps[checkpoint].end = Date.now();
-      }
+    if (isStart) {
+      response.currentStage += 1;
+      response.timestamps[checkpoint].start = Date.now();
     } else {
-      // Create empty entries up to the index
-      if (isStart) {
-        response.currentStage += 1;
-        response.timestamps[checkpoint].start = Date.now();
-      } else {
-        response.currentStage += 1;
-        response.timestamps[checkpoint].end = Date.now();
-      }
+      response.currentStage += 1;
+      response.timestamps[checkpoint].end = Date.now();
     }
     if (response.currentStage == 16) {
       response.finished = true;
