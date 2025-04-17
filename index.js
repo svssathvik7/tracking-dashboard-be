@@ -24,8 +24,8 @@ app.use(express.json());
 app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/track", trackingRoutes);
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+app.get("/health", (req, res) => {
+  return res.status(200).json({ status: true });
 });
 app.listen(port, () => {
   return console.log(`Express is listening at ${port}`);
