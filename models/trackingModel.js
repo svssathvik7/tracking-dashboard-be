@@ -22,6 +22,10 @@ const trackingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    details: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
     timestamps: {
       entry_gate: timestampSchema,
       front_office: timestampSchema,

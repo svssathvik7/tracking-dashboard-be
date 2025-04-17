@@ -2,11 +2,12 @@ import express from "express";
 import Tracking from "../models/trackingModel.js";
 const router = express.Router();
 
-router.post("/add-truck/:id", async (req, res) => {
-  const { id } = req.params;
+router.post("/add-truck", async (req, res) => {
+  const { trackingNumber, details } = req.body;
   const newTruck = await Tracking({
-    trackingNumber: id,
+    trackingNumber: trackingNumber,
     finished: false,
+    details,
     timestamps: {
       entry_gate: {
         start: null,
