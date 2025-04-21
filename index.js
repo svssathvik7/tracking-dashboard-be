@@ -6,7 +6,6 @@ import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import trackingRoutes from "./routes/truckRoutes.js";
 import cors from "cors";
-import createAdmin from "./services/createAdmin.js";
 const app = express();
 const port = 3000;
 
