@@ -23,16 +23,7 @@ const userSchema = new mongoose.Schema(
     checkPointAssigned: [
       {
         type: String,
-        enum: [
-          "entry_gate",
-          "front_office",
-          "weigh_bridge",
-          "qc",
-          "material_handling",
-          "weigh_bridge_return",
-          "front_office_return",
-          "entry_gate_return",
-        ],
+        required: true,
       },
     ],
     trucksAssigned: [
