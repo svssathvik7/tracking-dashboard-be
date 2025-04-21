@@ -14,6 +14,24 @@ router.post("/add-truck", async (req, res) => {
   return res.status(201).json({ message: "Created tracking successfully!" });
 });
 
+router.get("/get-all-checkpoints", async (req, res) => {
+  try {
+    const trackings = await Tracking.find({});
+    const uniqueStages = new Set();
+    
+    trackings.forEach(tracking => {
+      tracking.stages.forEach(stage => {
+        uniqueStages.add(stage.name);
+      });
+    });
+    
+    return res.status(200).json({ data: Array.from(uniqueStages) });
+  } catch (error) {
+    console.error("Error fetching checkpoints:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 router.get("/get-all-trucks", async (req, res) => {
   const response = await Tracking.find({}).sort({ createdAt: -1 });
   return res.status(200).json({ data: response });
@@ -29,11 +47,12 @@ router.post("/update", async (req, res) => {
       return res.status(404).json({ error: "Tracking record not found." });
     }
 
-    if (!response.timestamps[checkpoint]) {
+    const stageIndex = response.stages.findIndex(stage => stage.name === checkpoint);
+    console.log(stageIndex, checkpoint, response.stages);
+    if (!response.stages[stageIndex]) {
       return res.status(401).json({ error: "Checkpoint not found." });
     }
 
-    const stageIndex = response.stages.indexOf(checkpoint);
     if (isStart) {
       response.currentStage += 1;
       response.stages[stageIndex].start = Date.now();
@@ -42,10 +61,11 @@ router.post("/update", async (req, res) => {
       response.stages[stageIndex].end = Date.now();
       if (stageIndex != response.stages.length - 1){
         response.stages[stageIndex+1].start = Date.now();
+        response.currentStage += 1;
       } else {
         response.finished = true;
+        response.currentStage = 2*response.stages.length;
       }
-      response.currentStage += 1;
     }
 
     await response.save();
