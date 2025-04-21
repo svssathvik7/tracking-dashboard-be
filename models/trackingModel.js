@@ -1,13 +1,5 @@
 import mongoose from "mongoose";
 
-const timestampSchema = new mongoose.Schema(
-  {
-    start: { type: Date, default: null },
-    end: { type: Date, default: null },
-  },
-  { _id: false }
-);
-
 const trackingSchema = new mongoose.Schema(
   {
     currentStage: {
@@ -26,16 +18,26 @@ const trackingSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.Mixed,
       default: {},
     },
-    timestamps: {
-      entry_gate: timestampSchema,
-      front_office: timestampSchema,
-      weigh_bridge: timestampSchema,
-      qc: timestampSchema,
-      material_handling: timestampSchema,
-      weigh_bridge_return: timestampSchema,
-      front_office_return: timestampSchema,
-      entry_gate_return: timestampSchema,
-    },
+    stages: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        stageNumber: {
+          type: Number,
+          required: true,
+        },
+        start: {
+          type: Date,
+          default: null,
+        },
+        end: {
+          type: Date,
+          default: null,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

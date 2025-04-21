@@ -3,24 +3,12 @@ import Tracking from "../models/trackingModel.js";
 const router = express.Router();
 
 router.post("/add-truck", async (req, res) => {
-  const { trackingNumber, details } = req.body;
+  const { trackingNumber, details, stages } = req.body;
   const newTruck = await Tracking({
     trackingNumber: trackingNumber,
     finished: false,
     details,
-    timestamps: {
-      entry_gate: {
-        start: null,
-        end: null,
-      },
-      front_office: { start: null, end: null },
-      weigh_bridge: { start: null, end: null },
-      qc: { start: null, end: null },
-      material_handling: { start: null, end: null },
-      weigh_bridge_return: { start: null, end: null },
-      front_office_return: { start: null, end: null },
-      entry_gate_return: { start: null, end: null },
-    },
+    stages,
   });
   await newTruck.save();
   return res.status(201).json({ message: "Created tracking successfully!" });
@@ -30,17 +18,6 @@ router.get("/get-all-trucks", async (req, res) => {
   const response = await Tracking.find({}).sort({ createdAt: -1 });
   return res.status(200).json({ data: response });
 });
-
-let checkpoints = [
-  "entry_gate",
-  "front_office",
-  "weigh_bridge",
-  "qc",
-  "material_handling",
-  "weigh_bridge_return",
-  "front_office_return",
-  "entry_gate_return",
-];
 
 router.post("/update", async (req, res) => {
   try {
@@ -56,18 +33,19 @@ router.post("/update", async (req, res) => {
       return res.status(401).json({ error: "Checkpoint not found." });
     }
 
+    const stageIndex = response.stages.indexOf(checkpoint);
     if (isStart) {
       response.currentStage += 1;
-      response.timestamps[checkpoint].start = Date.now();
+      response.stages[stageIndex].start = Date.now();
     } else {
       response.currentStage += 1;
-      const currentIndex = checkpoints.indexOf(checkpoint);
-      response.timestamps[checkpoint].end = Date.now();
-      response.timestamps[checkpoints[currentIndex + 1]].start = Date.now();
+      response.stages[stageIndex].end = Date.now();
+      if (stageIndex != response.stages.length - 1){
+        response.stages[stageIndex+1].start = Date.now();
+      } else {
+        response.finished = true;
+      }
       response.currentStage += 1;
-    }
-    if (response.currentStage == 16) {
-      response.finished = true;
     }
 
     await response.save();
