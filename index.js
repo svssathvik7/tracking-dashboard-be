@@ -5,8 +5,8 @@ import mongoose from "mongoose";
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import trackingRoutes from "./routes/truckRoutes.js";
+import workFlowRoutes from "./routes/workflowRoutes.js";
 import cors from "cors";
-import createAdmin from "./services/createAdmin.js";
 const app = express();
 const port = 3000;
 
@@ -25,6 +25,7 @@ app.use(express.json());
 app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/track", trackingRoutes);
+app.use("/workflows", workFlowRoutes);
 app.get("/health", (req, res) => {
   return res.status(200).json({ status: true });
 });
