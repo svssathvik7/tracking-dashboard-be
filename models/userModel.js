@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema(
     checkPointAssigned: [
       {
         type: String,
-        required: true,
       },
     ],
     trucksAssigned: [

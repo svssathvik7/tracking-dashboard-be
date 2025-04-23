@@ -1,5 +1,6 @@
 import express from "express";
 import Tracking from "../models/trackingModel.js";
+import workflowModel from "../models/workflowModel.js";
 const router = express.Router();
 
 router.post("/add-truck", async (req, res) => {
@@ -16,15 +17,15 @@ router.post("/add-truck", async (req, res) => {
 
 router.get("/get-all-checkpoints", async (req, res) => {
   try {
-    const trackings = await Tracking.find({});
+    const workflows = await workflowModel.find({});
     const uniqueStages = new Set();
-    
-    trackings.forEach(tracking => {
-      tracking.stages.forEach(stage => {
+
+    workflows.forEach((workflow) => {
+      workflow.stages.forEach((stage) => {
         uniqueStages.add(stage.name);
       });
     });
-    
+
     return res.status(200).json({ data: Array.from(uniqueStages) });
   } catch (error) {
     console.error("Error fetching checkpoints:", error);
@@ -47,7 +48,9 @@ router.post("/update", async (req, res) => {
       return res.status(404).json({ error: "Tracking record not found." });
     }
 
-    const stageIndex = response.stages.findIndex(stage => stage.name === checkpoint);
+    const stageIndex = response.stages.findIndex(
+      (stage) => stage.name === checkpoint
+    );
     console.log(stageIndex, checkpoint, response.stages);
     if (!response.stages[stageIndex]) {
       return res.status(401).json({ error: "Checkpoint not found." });
@@ -59,12 +62,12 @@ router.post("/update", async (req, res) => {
     } else {
       response.currentStage += 1;
       response.stages[stageIndex].end = Date.now();
-      if (stageIndex != response.stages.length - 1){
-        response.stages[stageIndex+1].start = Date.now();
+      if (stageIndex != response.stages.length - 1) {
+        response.stages[stageIndex + 1].start = Date.now();
         response.currentStage += 1;
       } else {
         response.finished = true;
-        response.currentStage = 2*response.stages.length;
+        response.currentStage = 2 * response.stages.length;
       }
     }
 

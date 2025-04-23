@@ -30,4 +30,15 @@ router.get("/get-user/:id", async (req, res) => {
   return res.status(200).json({ data: user });
 });
 
+router.post("/update-operator", async (req, res) => {
+  const { checkPointAssigned, email } = req.body;
+  const matchingUser = await User.findOne({ email });
+  if (!matchingUser) {
+    return res.status(400).json({ message: "User not found" });
+  }
+  matchingUser.checkPointAssigned = checkPointAssigned;
+  await matchingUser.save();
+  return res.status(200).json({ message: "User updated successfully" });
+});
+
 export default router;

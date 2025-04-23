@@ -6,6 +6,7 @@ import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import trackingRoutes from "./routes/truckRoutes.js";
 import workFlowRoutes from "./routes/workflowRoutes.js";
+import createAdmin from "./services/createAdmin.js";
 import cors from "cors";
 const app = express();
 const port = 3000;
@@ -14,7 +15,7 @@ const dbUrl = process.env.DB;
 
 const db = mongoose.connect(dbUrl);
 db.then(() => {
-  // createAdmin(); // Call the createAdmin function her
+  //createAdmin(); // Call the createAdmin function her
   console.log("Connected to MongoDB");
 });
 db.catch((err) => {
