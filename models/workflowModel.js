@@ -8,6 +8,11 @@ const workflowSchema = new mongoose.Schema({
   },
   stages: [
     {
+      id: {
+        type: String,
+        required: true,
+        unique: true, // Ensure uniqueness of the ID s
+      },
       name: {
         type: String,
         required: true,

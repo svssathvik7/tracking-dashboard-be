@@ -47,9 +47,9 @@ router.post("/update", async (req, res) => {
     if (!response) {
       return res.status(404).json({ error: "Tracking record not found." });
     }
-
+    console.log("Searching index for ", checkpoint);
     const stageIndex = response.stages.findIndex(
-      (stage) => stage.name === checkpoint
+      (stage) => stage.id == checkpoint
     );
     console.log(stageIndex, checkpoint, response.stages);
     if (!response.stages[stageIndex]) {
